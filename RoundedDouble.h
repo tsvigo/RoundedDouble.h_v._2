@@ -12,16 +12,17 @@
 #include <sstream>
 #include <string>
 //-------------------------------------------------------------------
-extern int peredacha_decimalPlaces=7;
+extern int peredacha_decimalPlaces;
 //-------------------------------------------------------------------
 class RoundedDouble {
 private:
     double value;  // Само значение типа double
-    int decimalPlaces;  // Количество знаков после запятой
+//  extern
+        int decimalPlaces;  // Количество знаков после запятой
 public:
 
     // Конструктор, который принимает значение и округляет его
-    RoundedDouble(double val, int decimalPlaces = peredacha_decimalPlaces=
+    RoundedDouble(double val, int decimalPlaces = //peredacha_decimalPlaces=
    // 4
   //  8
      //             2
@@ -29,7 +30,7 @@ public:
             //      5
                  // 6
                   7
-                  ) // NOTE: округление к 8 цифрам после запятой
+                  ) // NOTE: округление к 7 цифрам после запятой
         : value(roundToDecimal(val, decimalPlaces)), decimalPlaces(decimalPlaces) {
         std::cout << std::fixed << std::setprecision(7);
         // отладка:
@@ -69,7 +70,11 @@ public:
     RoundedDouble() : value(0.0000000) {   std::setlocale(LC_ALL, "C");}
     // Устанавливаем локаль "C" (международная)
     // точка - десятичный разделитель
-
+#//----------------------------------------------------------------------------------------------------- \
+    // Перегружаем оператор >> для RoundedDouble \
+    // Объявляем перегруженный оператор >> как дружественную функцию
+    friend std::istream& operator>>(std::istream& is, RoundedDouble& rd);
+#//--------------------------------------------------------------------------------------------------------------------------
     // Конструктор с параметром
   //  RoundedDouble(double val) : value(val) {}
 
@@ -236,6 +241,14 @@ public:
         oss << std::fixed << std::setprecision(7) << value; // decimalPlaces
         return oss.str();
     }
+#//--------------------------------------------------------------------------------------
+    // std::optional<RoundedDouble> getElement(const std::vector<std::array<RoundedDouble, 2>>& points,
+    //                                         size_t vectorIndex, size_t arrayIndex) {
+    //     if (vectorIndex < points.size() && arrayIndex < points[vectorIndex].size()) {
+    //         return points[vectorIndex][arrayIndex];
+    //     }
+    //     return std::nullopt; // Возвращаем "пустое" значение
+    // }
 
 };
 #endif // ROUNDEDDOUBLE_H
